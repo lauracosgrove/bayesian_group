@@ -1,15 +1,15 @@
 ---
 title: "Presentation"
-author: "Laura Cosgrove"
+author: "Group 3"
 date: "10/16/2019"
-output: ioslides_presentation
+output: slidy_presentation
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## R Markdown
+## Group 3
 
 Assignments:
 
@@ -27,14 +27,16 @@ One approach:
     
 ## Model
 
-Alternate approach: define the MTD with respect to multiple toxicity contraints set on the separate grades:
+Alternate approach (Lee et al., 2011): define the MTD with respect to multiple toxicity contraints set on the separate grades:
 
 $$MTD = \theta = argmax\{Pr(T \ge t_{l}|x) \le p_l, \ l = 1, ... L\}$$
 To identify the model, define a  latent normally-distributed variable Z with:
   
   $$EZ = \alpha + \beta x, \ Var(Z) = 1$$ 
   
-Such that $t_l \le T \le t_{l+1}$ $iff$ $\gamma_l \le Z \le \gamma_{l+1}$ (Lee et al., 2011).
+Such that:
+
+$$t_l \le T \le t_{l+1} \ \ iff \ \ \gamma_l \le Z \le \gamma_{l+1}$$
 
 ## Model, continued
  
@@ -45,9 +47,7 @@ $$Pr(t_l \le T \le t_{l+1}|x) = Pr(\gamma_l \le Z \le \gamma_{l+1} | x)$$
 $$Pr(t_l \le T \le t_{l+1}|x) = Pr(Z \le \gamma_{l+1} | x) - Pr(Z \le \gamma_{l} | x)$$ 
 $$= Pr({Z - EZ}\le \gamma_{l+1} - (\alpha + \beta x)  | x) - Pr({Z - EZ} \le \gamma_{l} - (\alpha + \beta x) | x)$$ 
 $$= \Phi(\gamma_{l+1} - (\alpha + \beta x)) - \Phi(\gamma_{l} - (\alpha + \beta x))$$ 
-$$Pr(T \le t_{l+1}|x) - Pr(T \le t_{l} | x) = $$
-
-$$\Phi(\gamma_{l+1} - (\alpha + \beta x)) - \Phi(\gamma_{l} - (\alpha + \beta x))$$ 
+$$Pr(T \le t_{l+1}|x) - Pr(T \le t_{l} | x) = \Phi(\gamma_{l+1} - (\alpha + \beta x)) - \Phi(\gamma_{l} - (\alpha + \beta x))$$ 
 
 ## Model result
 
@@ -55,11 +55,12 @@ $$\Phi(\gamma_{l+1} - (\alpha + \beta x)) - \Phi(\gamma_{l} - (\alpha + \beta x)
   
   $$-1*Pr(T \le t_{l} | x) =  -1*\Phi(\gamma_{l} - (\alpha + \beta x))$$
   
-  *$$Pr(T \ge t_{l} | x) =  \Phi(\alpha + \beta x - \gamma_{l})$$*
+$$Pr(T \ge t_{l} | x) =  \Phi(\alpha + \beta x - \gamma_{l})$$
   
 Note our objective:
 
 $$MTD = \theta = argmax\{Pr(T \ge t_{l}|x) \le p_l, \ l = 1, ... L\}$$
+$$\theta = argmax\{\Phi(\alpha + \beta x - \gamma_{l})\le p_l\, \ l = 1, ... L\}$$
 
 ## Design Parameters
 
@@ -68,8 +69,11 @@ For modelling:
   - Take $\alpha = 3$ (convention, Cheung 2002).
   
   - Objective can be written as  $\theta = min\{\theta_1, ..., \theta_L\} = \theta_{\lambda}$, where each toxicity constraint is met at the respective dose levels:
+    -  Note that the inverse normal CDF is the probit
+
   
 $$\theta_l = \frac{{\gamma_l + \Phi^{−1}(p_l) − 3}}{\beta}$$
+  
 - So what we need to estimate is an explicit function of our design parameters: $\gamma_1, \gamma_2, p_1, p_2, \beta$
 
 - Specify prior distributions for  $\gamma_1, \gamma_2, \beta$ $\sim exp(1)$
