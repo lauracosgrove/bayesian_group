@@ -1,7 +1,7 @@
 ---
-title: "Presentation"
-author: "Group 3"
-date: "10/16/2019"
+title: "Dose Finding with Multiple Toxicities using CRM"
+author: "Group 3: Laura Cosgrove, Yue Gu, Jinyou Liu, Jingwei Ren, Kee-Young Shin, Chu Yu, Adina Zhang"
+date: "10/21/2019"
 output: 
   slidy_presentation:
     duration: 10
@@ -9,6 +9,8 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(kableExtra)
 ```
 
 ## Prompt
@@ -16,6 +18,28 @@ knitr::opts_chunk$set(echo = FALSE)
 - What are the design parameters? 
 - What are performance metrics?
 - Which dose will you start the trial at?
+
+\newline
+\newline
+\newline
+
+```{r}
+table = tibble(" " = c("2.5 mg/100 ml","5.0 mg/100 ml"),
+
+               "0 mg/100 ml" = c("X", ""),
+
+               "66 mg/100 ml"= c("X","X"),
+
+               "80 mg/100 ml" = c("", "X"),
+
+               "100 mg/100 ml" = c("", "X"))
+
+table %>% knitr::kable() %>%
+
+kable_styling(latex_options = c("striped")) %>%
+
+add_header_above(c("Cabazitaxel" = 1, "Cisplatin dose" = 4))
+```
 
 ## Multiple toxicity levels: how to model
 
