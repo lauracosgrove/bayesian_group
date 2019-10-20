@@ -27,14 +27,16 @@ One approach:
     
 ## Multiple toxicity levels: how to model
 
-Alternate approach (Lee et al., 2011): define the MTD with respect to multiple toxicity contraints set on the separate grades:
+Alternate approach (Lee et al., 2011): define the MTD using Continual Reassessment Method (CRM) with respect to multiple toxicity contraints set on separate toxicity grades:
 
 $$MTD = \theta = argmax\{Pr(T \ge t_{l}|x) \le p_l, \ l = 1, ... L\}$$
 
-- T are toxicity grades (grade 2 or grade 3)
+- T are toxicity grades 
 - $l$ = 1...L are the prespecified toxicity constraints in terms of T.
 - $t_1 < ... < t_L$ are prespecified toxicity thresholds
 - $p_1 > ... > p_L$ are their respective target probabilities
+
+## Model, continued
 
 To identify the model, define a  latent normally-distributed variable Z with:
   
@@ -43,8 +45,6 @@ To identify the model, define a  latent normally-distributed variable Z with:
 Such that:
 
 $$t_l \le T \le t_{l+1} \ \ iff \ \ \gamma_l \le Z \le \gamma_{l+1}$$
-
-## Model, continued
  
 In this way, it's not necessary to directly model the distribution T within each interval $[t_l, t_{l+1}]$, while still allowing ourselves to identify the distribution:
     
@@ -72,19 +72,22 @@ $$\theta = argmax\{\Phi(\alpha + \beta x - \gamma_{l})\le p_l\, \ l = 1, ... L\}
 
 For modelling:
 
-  - Take $\alpha = 3$ (convention, Cheung 2002).
+- Take $\alpha = 3$ (convention, Cheung 2002).
   
-  - Objective can be written as  $\theta = min\{\theta_1, ..., \theta_L\} = \theta_{\lambda}$, where each toxicity constraint is met at the respective dose levels:
-    -  Note that the inverse normal CDF is the probit
+- Objective can be written as  $\theta = min\{\theta_1, ..., \theta_L\} = \theta_{\lambda}$, where each toxicity constraint is met at the respective dose levels:
+  -  Note that the inverse normal CDF is the probit
 
   
 $$\theta_l = \frac{{\gamma_l + \Phi^{−1}(p_l) − 3}}{\beta}$$
   
-- So what we need to estimate is an explicit function of our design parameters: $\gamma_1, \gamma_2, p_1, p_2, \beta$
+- So given two toxicity grades (L = 2), we need to estimate is an explicit function of our design parameters: $\gamma_1, \gamma_2, p_1, p_2, \beta$
 
 - Specify prior distributions for  $\gamma_1, \gamma_2, \beta$ $\sim exp(1)$
 
+- Specify a halfwidth $\delta$ for the indifference interval 
+
 - Specify target DLT rates for grade 2 and 3 toxicity, $p_1, p_2$ and choose skeleton for each toxicity level: $(p_{0,1, 1}.  p_{0,2,1}, p_{0,3,1}, p_{0,4,1},  p_{0,5.1})$ and $(p_{0,1,2},  p_{0,2,2}, p_{0,3,2}, p_{0,4,2},  p_{0,5,2})$ 
+
 
 ## Performance metrics
 
@@ -109,5 +112,3 @@ $$\theta_l = \frac{{\gamma_l + \Phi^{−1}(p_l) − 3}}{\beta}$$
 - This suggests we should start the dose finding at a lower dose
 
 - Choose the lowest dose
-
-

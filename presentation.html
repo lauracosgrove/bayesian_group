@@ -42,21 +42,21 @@ Group 3
 </div>
 <div id="multiple-toxicity-levels-how-to-model-1" class="slide section level2">
 <h2>Multiple toxicity levels: how to model</h2>
-<p>Alternate approach (Lee et al., 2011): define the MTD with respect to multiple toxicity contraints set on the separate grades:</p>
+<p>Alternate approach (Lee et al., 2011): define the MTD using Continual Reassessment Method (CRM) with respect to multiple toxicity contraints set on separate toxicity grades:</p>
 <p><span class="math display">\[MTD = \theta = argmax\{Pr(T \ge t_{l}|x) \le p_l, \ l = 1, ... L\}\]</span></p>
 <ul>
-<li>T are toxicity grades (grade 2 or grade 3)</li>
+<li>T are toxicity grades</li>
 <li><span class="math inline">\(l\)</span> = 1…L are the prespecified toxicity constraints in terms of T.</li>
 <li><span class="math inline">\(t_1 &lt; ... &lt; t_L\)</span> are prespecified toxicity thresholds</li>
 <li><span class="math inline">\(p_1 &gt; ... &gt; p_L\)</span> are their respective target probabilities</li>
 </ul>
+</div>
+<div id="model-continued" class="slide section level2">
+<h2>Model, continued</h2>
 <p>To identify the model, define a latent normally-distributed variable Z with:</p>
 <p><span class="math display">\[EZ = \alpha + \beta x, \ Var(Z) = 1\]</span></p>
 <p>Such that:</p>
 <p><span class="math display">\[t_l \le T \le t_{l+1} \ \ iff \ \ \gamma_l \le Z \le \gamma_{l+1}\]</span></p>
-</div>
-<div id="model-continued" class="slide section level2">
-<h2>Model, continued</h2>
 <p>In this way, it’s not necessary to directly model the distribution T within each interval <span class="math inline">\([t_l, t_{l+1}]\)</span>, while still allowing ourselves to identify the distribution:</p>
 <p><span class="math display">\[Pr(t_l \le T \le t_{l+1}|x) = Pr(\gamma_l \le Z \le \gamma_{l+1} | x)\]</span></p>
 <p><span class="math display">\[Pr(t_l \le T \le t_{l+1}|x) = Pr(Z \le \gamma_{l+1} | x) - Pr(Z \le \gamma_{l} | x)\]</span> <span class="math display">\[= Pr({Z - EZ}\le \gamma_{l+1} - (\alpha + \beta x)  | x) - Pr({Z - EZ} \le \gamma_{l} - (\alpha + \beta x) | x)\]</span> <span class="math display">\[= \Phi(\gamma_{l+1} - (\alpha + \beta x)) - \Phi(\gamma_{l} - (\alpha + \beta x))\]</span> <span class="math display">\[Pr(T \le t_{l+1}|x) - Pr(T \le t_{l} | x) = \Phi(\gamma_{l+1} - (\alpha + \beta x)) - \Phi(\gamma_{l} - (\alpha + \beta x))\]</span></p>
@@ -76,15 +76,14 @@ Group 3
 <p>For modelling:</p>
 <ul>
 <li><p>Take <span class="math inline">\(\alpha = 3\)</span> (convention, Cheung 2002).</p></li>
-<li>Objective can be written as <span class="math inline">\(\theta = min\{\theta_1, ..., \theta_L\} = \theta_{\lambda}\)</span>, where each toxicity constraint is met at the respective dose levels:
-<ul>
-<li>Note that the inverse normal CDF is the probit</li>
-</ul></li>
+<li>Objective can be written as <span class="math inline">\(\theta = min\{\theta_1, ..., \theta_L\} = \theta_{\lambda}\)</span>, where each toxicity constraint is met at the respective dose levels:</li>
+<li><p>Note that the inverse normal CDF is the probit</p></li>
 </ul>
 <p><span class="math display">\[\theta_l = \frac{{\gamma_l + \Phi^{−1}(p_l) − 3}}{\beta}\]</span></p>
 <ul>
-<li><p>So what we need to estimate is an explicit function of our design parameters: <span class="math inline">\(\gamma_1, \gamma_2, p_1, p_2, \beta\)</span></p></li>
+<li><p>So given two toxicity grades (L = 2), we need to estimate is an explicit function of our design parameters: <span class="math inline">\(\gamma_1, \gamma_2, p_1, p_2, \beta\)</span></p></li>
 <li><p>Specify prior distributions for <span class="math inline">\(\gamma_1, \gamma_2, \beta\)</span> <span class="math inline">\(\sim exp(1)\)</span></p></li>
+<li><p>Specify a halfwidth <span class="math inline">\(\delta\)</span> for the indifference interval</p></li>
 <li><p>Specify target DLT rates for grade 2 and 3 toxicity, <span class="math inline">\(p_1, p_2\)</span> and choose skeleton for each toxicity level: <span class="math inline">\((p_{0,1, 1}. p_{0,2,1}, p_{0,3,1}, p_{0,4,1}, p_{0,5.1})\)</span> and <span class="math inline">\((p_{0,1,2}, p_{0,2,2}, p_{0,3,2}, p_{0,4,2}, p_{0,5,2})\)</span></p></li>
 </ul>
 </div>
