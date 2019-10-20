@@ -2,22 +2,22 @@
 title: "Presentation"
 author: "Group 3"
 date: "10/16/2019"
-output: slidy_presentation
+output: 
+  slidy_presentation:
+    duration: 10
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## Group 3
+## Prompt
 
-Assignments:
-
-- What are the design parameters? Adina
+- What are the design parameters? 
 - What are performance metrics?
 - Which dose will you start the trial at?
 
-## Model
+## Multiple toxicity levels: how to model
 
 One approach: 
 
@@ -25,7 +25,7 @@ One approach:
     - Some problems: Total toxicity burden is not that interpretable (compared to setting separate limits for each grade of outcome)
     - Not for this problem, but for others, the modelled distribution can get high-dimensional if there are many types of toxicity.
     
-## Model
+## Multiple toxicity levels: how to model
 
 Alternate approach (Lee et al., 2011): define the MTD with respect to multiple toxicity contraints set on the separate grades:
 
@@ -78,7 +78,7 @@ $$\theta_l = \frac{{\gamma_l + \Phi^{−1}(p_l) − 3}}{\beta}$$
 
 - Specify prior distributions for  $\gamma_1, \gamma_2, \beta$ $\sim exp(1)$
 
-- Specify target $p_1, p_2$
+- Specify target DLT rates for grade 2 and 3 toxicity, $p_1, p_2$ and choose skeleton for each toxicity level: $(p_{0,1, 1}.  p_{0,2,1}, p_{0,3,1}, p_{0,4,1},  p_{0,5.1})$ and $(p_{0,1,2},  p_{0,2,2}, p_{0,3,2}, p_{0,4,2},  p_{0,5,2})$ 
 
 ## Performance metrics
 
@@ -104,7 +104,4 @@ $$\theta_l = \frac{{\gamma_l + \Phi^{−1}(p_l) − 3}}{\beta}$$
 
 - Choose the lowest dose
 
-```{r pressure}
-plot(pressure)
-```
 
