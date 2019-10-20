@@ -30,6 +30,12 @@ One approach:
 Alternate approach (Lee et al., 2011): define the MTD with respect to multiple toxicity contraints set on the separate grades:
 
 $$MTD = \theta = argmax\{Pr(T \ge t_{l}|x) \le p_l, \ l = 1, ... L\}$$
+
+- T are toxicity grades (grade 2 or grade 3)
+- $l$ = 1...L are the prespecified toxicity constraints in terms of T.
+- $t_1 < ... < t_L$ are prespecified toxicity thresholds
+- $p_1 > ... > p_L$ are their respective target probabilities
+
 To identify the model, define a  latent normally-distributed variable Z with:
   
   $$EZ = \alpha + \beta x, \ Var(Z) = 1$$ 
