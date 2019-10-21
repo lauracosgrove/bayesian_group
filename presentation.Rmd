@@ -1,6 +1,6 @@
 ---
 title: "Dose Finding with Multiple Toxicities using CRM"
-author: "Group 3: Laura Cosgrove, Yue Gu, Jinyou Liu, Jingwei Ren, Kee-Young Shin, Chu Yu, Adina Zhang"
+author: "Group 3: Laura Cosgrove, Yue Gu, Jianyou Liu, Jingwei Ren, Kee-Young Shin, Chu Yu, Adina Zhang"
 date: "10/21/2019"
 output: 
   slidy_presentation:
@@ -136,3 +136,5 @@ $$\theta_l = \frac{{\gamma_l + \Phi^{−1}(p_l) − 3}}{\beta}$$
 - This suggests we should start the dose finding at a lower dose
 
 - Choose the lowest dose
+
+## Assigning Doses
