@@ -139,7 +139,7 @@ $$\theta_l = \frac{{\gamma_l + \Phi^{−1}(p_l) − 3}}{\beta}$$
 - Choose the lowest dose
 
 ## Assigning Doses #1
-1. Randomization: randomized patients into 2 groups based on Cabazitaxel dose level(2.5/5.0 mg/100ml)
+1. Randomization: randomized patients into 2 groups based on Cabazitaxel dose level(2.5 or 5.0 mg/100ml)
 ```{r}
 rbind(c("(1,1)","(1,2)","(1,3)","(1,4)"),
       c("(2,1)","(2,2)","(2,3)","(2,4)")) %>% 
@@ -156,3 +156,4 @@ rbind(c("(1,1)","(1,2)","(1,3)","(1,4)"),
 3. Apply $CRM-MC_2$: "define $\tilde{\theta}=\hat{\theta}_{n,\hat{\lambda_n}}$, where $\hat{\theta}_{n,l}$ denotes the marginal posterior median of $\theta_l$ given the first n obs, and $\hat{\lambda}_n=argmin_l\hat{\theta}_{n,l}$. The next patient is given $\tilde{x}_{n+1}=argmin_{d_k}|d_k-\tilde{\theta}_n|$" (Lee et al., 2011)
 4. Trial: start the trial to get dose level chart and dose-toxicity curve
 5. Choosing start dose $L_2=(2,1)$ to group 2 patients (5.0mg/100ml) and redo steps following step3 and step4
+6. Compare the dose-toxicity curve from group 1 and 2, decide the recommended MTD (with target p)
