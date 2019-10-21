@@ -1,23 +1,48 @@
 ---
-title: "Presentation"
-author: "Group 3"
-date: "10/16/2019"
-output: slidy_presentation
+title: "Dose Finding with Multiple Toxicities using CRM"
+author: "Group 3: Laura Cosgrove, Yue Gu, Jianyou Liu, Jingwei Ren, Kee-Young Shin, Chu Yu, Adina Zhang"
+date: "10/21/2019"
+output: 
+  slidy_presentation:
+    duration: 10
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(kableExtra)
+library(data.table)
 ```
 
-## Group 3
+## Prompt
 
-Assignments:
-
-- What are the design parameters? Adina
+- What are the design parameters? 
 - What are performance metrics?
 - Which dose will you start the trial at?
 
-## Model
+\newline
+\newline
+\newline
+
+```{r}
+table = tibble(" " = c("2.5 mg/100 ml","5.0 mg/100 ml"),
+
+               "0 mg/100 ml" = c("X", ""),
+
+               "66 mg/100 ml"= c("X","X"),
+
+               "80 mg/100 ml" = c("", "X"),
+
+               "100 mg/100 ml" = c("", "X"))
+
+table %>% knitr::kable() %>%
+
+kable_styling(latex_options = c("striped")) %>%
+
+add_header_above(c("Cabazitaxel" = 1, "Cisplatin dose" = 4))
+```
+
+## Multiple toxicity levels: how to model
 
 One approach: 
 
@@ -25,11 +50,19 @@ One approach:
     - Some problems: Total toxicity burden is not that interpretable (compared to setting separate limits for each grade of outcome)
     - Not for this problem, but for others, the modelled distribution can get high-dimensional if there are many types of toxicity.
     
-## Model
+## Multiple toxicity levels: how to model
 
-Alternate approach (Lee et al., 2011): define the MTD with respect to multiple toxicity contraints set on the separate grades:
+Alternate approach (Lee et al., 2011): define the MTD using Continual Reassessment Method (CRM) with respect to multiple toxicity contraints set on separate toxicity grades:
 
 $$MTD = \theta = argmax\{Pr(T \ge t_{l}|x) \le p_l, \ l = 1, ... L\}$$
+
+- T are toxicity grades 
+- $l$ = 1...L are the prespecified toxicity constraints in terms of T.
+- $t_1 < ... < t_L$ are prespecified toxicity thresholds
+- $p_1 > ... > p_L$ are their respective target probabilities
+
+## Model, continued
+
 To identify the model, define a  latent normally-distributed variable Z with:
   
   $$EZ = \alpha + \beta x, \ Var(Z) = 1$$ 
@@ -37,8 +70,6 @@ To identify the model, define a  latent normally-distributed variable Z with:
 Such that:
 
 $$t_l \le T \le t_{l+1} \ \ iff \ \ \gamma_l \le Z \le \gamma_{l+1}$$
-
-## Model, continued
  
 In this way, it's not necessary to directly model the distribution T within each interval $[t_l, t_{l+1}]$, while still allowing ourselves to identify the distribution:
     
@@ -66,19 +97,22 @@ $$\theta = argmax\{\Phi(\alpha + \beta x - \gamma_{l})\le p_l\, \ l = 1, ... L\}
 
 For modelling:
 
-  - Take $\alpha = 3$ (convention, Cheung 2002).
+- Take $\alpha = 3$ (convention, Cheung 2002).
   
-  - Objective can be written as  $\theta = min\{\theta_1, ..., \theta_L\} = \theta_{\lambda}$, where each toxicity constraint is met at the respective dose levels:
-    -  Note that the inverse normal CDF is the probit
+- Objective can be written as  $\theta = min\{\theta_1, ..., \theta_L\} = \theta_{\lambda}$, where each toxicity constraint is met at the respective dose levels:
+  -  Note that the inverse normal CDF is the probit
 
   
 $$\theta_l = \frac{{\gamma_l + \Phi^{−1}(p_l) − 3}}{\beta}$$
   
-- So what we need to estimate is an explicit function of our design parameters: $\gamma_1, \gamma_2, p_1, p_2, \beta$
+- So given two toxicity grades (L = 2), we need to estimate is an explicit function of our design parameters: $\gamma_1, \gamma_2, p_1, p_2, \beta$
 
 - Specify prior distributions for  $\gamma_1, \gamma_2, \beta$ $\sim exp(1)$
 
-- Specify target $p_1, p_2$
+- Specify a halfwidth $\delta$ for the indifference interval 
+
+- Specify target DLT rates for grade 2 and 3 toxicity, $p_1, p_2$ and choose skeleton for each toxicity level: $(p_{0,1, 1}.  p_{0,2,1}, p_{0,3,1}, p_{0,4,1},  p_{0,5.1})$ and $(p_{0,1,2},  p_{0,2,2}, p_{0,3,2}, p_{0,4,2},  p_{0,5,2})$ 
+
 
 ## Performance metrics
 
@@ -106,7 +140,22 @@ $$\theta_l = \frac{{\gamma_l + \Phi^{−1}(p_l) − 3}}{\beta}$$
 
 - Choose the lowest dose
 
-```{r pressure}
-plot(pressure)
+## Assigning Doses #1
+1. Randomization: randomized patients into 2 groups based on Cabazitaxel dose level(2.5 or 5.0 mg/100ml)
+```{r}
+rbind(c("(1,1)","(1,2)","(1,3)","(1,4)"),
+      c("(2,1)","(2,2)","(2,3)","(2,4)")) %>% 
+  as.data.frame() %>% 
+  setattr("row.names", c("2.5mg/100ml", "5.0mg/100ml")) %>%
+  setnames(c("0", "66", "80", "100")) %>% 
+  knitr::kable(row.names = T)
+  
 ```
 
+
+## Assigning Doses #2
+2. Choosing starting dose: apply $L_1$=(1,1) to group 1 patients (2.5mg/100ml)
+3. Apply $CRM-MC_2$: "define $\tilde{\theta}=\hat{\theta}_{n,\hat{\lambda_n}}$, where $\hat{\theta}_{n,l}$ denotes the marginal posterior median of $\theta_l$ given the first n obs, and $\hat{\lambda}_n=argmin_l\hat{\theta}_{n,l}$. The next patient is given $\tilde{x}_{n+1}=argmin_{d_k}|d_k-\tilde{\theta}_n|$" (Lee et al., 2011)
+4. Trial: start the trial to get dose level chart and dose-toxicity curve
+5. Choosing start dose $L_2=(2,1)$ to group 2 patients (5.0mg/100ml) and redo steps following step3 and step4
+6. Compare the dose-toxicity curve from group 1 and 2, decide the recommended MTD (with target p)
