@@ -82,9 +82,9 @@ $$Pr(T \le t_{l+1}|x) - Pr(T \le t_{l} | x) = \Phi(\gamma_{l+1} - (\alpha + \bet
 
 ## Model result
 
-  - Since $t_0 \equiv 0$:
+  - Since $t_{d_m + 1} \equiv \infty, $:
   
-  $$-1*Pr(T \le t_{l} | x) =  -1*\Phi(\gamma_{l} - (\alpha + \beta x))$$
+  $$1 -Pr(T \le t_{l} | x) =  1 -\Phi(\gamma_{l} - (\alpha + \beta x))$$
   
 $$Pr(T \ge t_{l} | x) =  \Phi(\alpha + \beta x - \gamma_{l})$$
   
