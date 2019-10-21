@@ -92,6 +92,8 @@ $$\theta_l = \frac{{\gamma_l + \Phi^{−1}(p_l) − 3}}{\beta}$$
 
 - Mean, median and interquartile range (IQR) for the estimated probability of DLT, grade level 1
 
+- E(TTB)
+
 ## Choosing Starting Dose
 
 - "Since $\theta = min\{\theta_1, ..., \theta_L\} \le \theta_1$, it is reasonable to believe that a prior guess of MTD should be somewhere below $d_v$. In light of this, we call a starting dose $x_1$ permissible if $x_1 \le d_v$." (Lee et al., 2011)
